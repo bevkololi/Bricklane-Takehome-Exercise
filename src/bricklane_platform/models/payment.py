@@ -3,12 +3,14 @@ from dateutil.parser import parse
 
 
 from bricklane_platform.models.card import Card
+from bricklane_platform.models.bank import Bank
 from bricklane_platform.config import PAYMENT_FEE_RATE
 
 
 class Payment(object):
 
     customer_id = None
+    bank_account_id = None
     date = None
     amount = None
     fee = None
@@ -31,5 +33,14 @@ class Payment(object):
         card.status = data["card_status"]
         self.card = card
 
+        bank = Bank()
+        bank.bank_account_id = int(data["bank_account_id"])
+        self.bank = bank
+
     def is_successful(self):
-        return self.card.status == "processed"
+        try:
+            return self.card.status == "processed"
+        except AttributeError as error:
+            return error
+        else:
+            return self.bank.status == "processed"
