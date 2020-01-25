@@ -1,5 +1,5 @@
 import csv
-from StringIO import StringIO
+from io import StringIO
 
 
 def group_by(items, key_func):

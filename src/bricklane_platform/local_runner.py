@@ -20,8 +20,9 @@ def main(csv_path, source, share_price):
 
     share_engine = ShareEngine()
     share_orders = share_engine.generate_share_orders(share_price, eligible_payments)
+    print(share_orders)
 
-    return generate_csv(["customer_id", "shares"], sorted(share_orders))
+    return generate_csv(["customer_id", "shares"], share_orders)
 
 
 if __name__ == "__main__":
@@ -32,4 +33,4 @@ if __name__ == "__main__":
     parser.add_argument("share_price", type=Decimal, help="Share price to generate share orders for e.g. '1.30'")
     args = parser.parse_args()
 
-    print main(args.csv_path, args.source, args.share_price)
+    print (main(args.csv_path, args.source, args.share_price))

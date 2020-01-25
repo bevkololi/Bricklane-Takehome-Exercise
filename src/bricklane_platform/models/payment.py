@@ -34,7 +34,10 @@ class Payment(object):
         self.card = card
 
         bank = Bank()
-        bank.bank_account_id = int(data["bank_account_id"])
+        if bank.bank_account_id:
+            bank.bank_account_id = int(data["bank_account_id"])
+        else:
+            bank.bank_account_id = None
         self.bank = bank
 
     def is_successful(self):
