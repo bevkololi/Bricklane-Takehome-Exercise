@@ -17,20 +17,31 @@ class TestPaymentProcessor(unittest.TestCase):
     def setUp(self):
         self.payment_processor = PaymentProcessor()
 
-    def test_get_payments(self):
-        fixture = get_path("card_payments_mixed.csv")
+    def test_get_card_payments(self):
+        card_fixture = get_path("card_payments_mixed.csv")
 
-        payments = self.payment_processor.get_payments(fixture, "card")
-        self.assertEqual(len(payments), 3)
-        self.assertEqual(payments[0].card.card_id, 30)
-        self.assertEqual(payments[1].card.card_id, 45)
-        self.assertEqual(payments[2].card.card_id, 10)
+        card_payments = self.payment_processor.get_payments(card_fixture, "card")
+        self.assertEqual(len(card_payments), 3)
+        self.assertEqual(card_payments[0].card.card_id, 30)
+        self.assertEqual(card_payments[1].card.card_id, 45)
+        self.assertEqual(card_payments[2].card.card_id, 10)
+
+    def test_get_bank_payments(self):
+        bank_fixture = get_path("bank_payments_mixed.csv")
+
+        bank_payments = self.payment_processor.get_payments(bank_fixture, "bank")
+        self.assertEqual(len(bank_payments), 2)
+        self.assertEqual(bank_payments[0].bank.bank_account_id, 20)
+        self.assertEqual(bank_payments[1].bank.bank_account_id, 60)
 
     def test_get_payments_empty(self):
-        fixture = get_path("card_payments_empty.csv")
+        card_fixture = get_path("card_payments_empty.csv")
+        bank_fixture = get_path("bank_payments_empty.csv")
 
-        payments = self.payment_processor.get_payments(fixture, "card")
-        self.assertEqual(len(payments), 0)
+        card_payments = self.payment_processor.get_payments(card_fixture, "card")
+        bank_payments = self.payment_processor.get_payments(bank_fixture, "bank")
+        self.assertEqual(len(card_payments), 0)
+        self.assertEqual(len(bank_payments), 0)
 
     def test_verify_payments(self):
         payment1 = create_stub_payment(mock_is_successful=True)

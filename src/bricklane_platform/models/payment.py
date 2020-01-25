@@ -28,17 +28,18 @@ class Payment(object):
         self.fee = total_amount * PAYMENT_FEE_RATE
         self.amount = total_amount - self.fee
 
-        card = Card()
-        card.card_id = int(data["card_id"])
-        card.status = data["card_status"]
-        self.card = card
+        try:
+            card_id = data["card_id"]
+            card = Card()
+            card.card_id = int(card_id)
+            card.status = data["card_status"]
+            self.card = card
+        except:
+            bank_account_id = data["bank_account_id"]
+            bank = Bank()
+            bank.bank_account_id = int(bank_account_id)
+            self.bank = bank
 
-        bank = Bank()
-        if bank.bank_account_id:
-            bank.bank_account_id = int(data["bank_account_id"])
-        else:
-            bank.bank_account_id = None
-        self.bank = bank
 
     def is_successful(self):
         try:
